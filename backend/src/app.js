@@ -26,7 +26,7 @@ import hotelRouter from './routes/hotels.routes.js'
 
 
 //routes declaration
-app.use("/api/v1/users",userRouter)
+app.use("/api/v1/user",userRouter)
 app.use("/api/v1/hotel",hotelRouter)
 
 export {app}
