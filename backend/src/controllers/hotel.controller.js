@@ -39,11 +39,28 @@ const deletehotel = asyncHandler(async(req,res) => {
     .json(new ApiResponse(200,{},"Hotel deleted successfully"))
 })
 //Get a hotel by id
+const getHotelInfo = asyncHandler(async(req,res) => {
+    const hotel = await Hotel.findById(req.params.id)
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,hotel))
+
+})
 //Get All hotels
+const getAllHotels = asyncHandler(async(req,res) =>{
+    const hotels = await Hotel.find()
+
+    return res.status(200)
+    .json(new ApiResponse(200, hotels))
+
+})
 
 
 export {
     hotels,
     updateHotels,
-    deletehotel
+    deletehotel,
+    getHotelInfo,
+    getAllHotels
 }
