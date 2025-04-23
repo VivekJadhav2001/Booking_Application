@@ -26,3 +26,28 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
 
 
 })
+
+
+export const verifyUser = (req, res, next) => {
+    verifyJWT(req, res, next, () => {
+        if(req.user.id === req.params.id || req.user.isAdmin){
+            next()
+        }else{
+            return res.status(403).json({
+                message: "You are not allowed to perform this action"
+            })
+        }
+    })
+}
+
+export const verifyAdmin = (req, res, next) =>{
+    verifyJWT(req,res,next, () =>{
+        if(req.user.isAdmin){
+            next()
+        }else{
+            return res.status(403).json({
+                message: "You are not allowed to perform this action"
+            })
+        }
+    })
+}

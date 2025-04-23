@@ -144,12 +144,65 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
+const updateUsername = asyncHandler(async (req, res) => {
+    
+    const { username } = req.body;
 
+    // Check if username is already taken by someone else
+    const existingUser = await User.findOne({ username });
+    if (existingUser && existingUser._id.toString() !== req.params.id) {
+        throw new ApiError(400, "Username already exists");
+    }
+
+    // Update the user's username
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        { $set: { username } },
+        { new: true, validateBeforeSave: false }
+    ).select("-password -refreshToken");
+
+    if (!user) {
+        throw new ApiError(400, "User not found");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, user, "Username updated successfully"));
+
+})
+
+const updateUserEmail = asyncHandler(async (req, res) => {
+    const {email} = req.body
+
+    // Check if email is already taken by someone else
+    const exsistingEmail = await User.findOne({email})
+    if(exsistingEmail && exsistingEmail._id.toString() !== req.params.id){
+        throw new ApiError(400, "Username already exists");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+            $set:{email}
+        },
+        { new: true, validateBeforeSave: false }
+    ).select("-password -refreshToken")
+
+    if(!user){
+        throw new ApiError(400, "User Not Found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Email updated successfully"))
+})
 
 
 
 export {
     register,
     loginUser,
-    logoutUser
+    logoutUser,
+    updateUsername,
+    updateUserEmail
 }
