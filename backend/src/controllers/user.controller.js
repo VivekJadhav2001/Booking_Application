@@ -1,10 +1,27 @@
-import {asyncHandler} from '../utils/asyncHandler.js'
-import {User} from '../models/user.model.js'
-import {ApiResponse} from '../utils/ApiResponse.js'
-import {ApiError} from '../utils/ApiError.js'
+import { asyncHandler } from '../utils/asyncHandler.js'
+import { User } from '../models/user.model.js'
+import { ApiResponse } from '../utils/ApiResponse.js'
+import { ApiError } from '../utils/ApiError.js'
 
 
-const register = asyncHandler(async(req, res) => {
+const generateAccessAndRefereshTokens = async (userId) => {
+    try {
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        user.save({ validateBeforeSave: false })
+
+        return { accessToken, refreshToken }
+
+
+    } catch (error) {
+        throw new ApiError(500, "Error generating tokens")
+    }
+}
+
+const register = asyncHandler(async (req, res) => {
     // get user details from frontend
     // validation - not empty
     // check if user already exists - check with username, email
@@ -15,18 +32,18 @@ const register = asyncHandler(async(req, res) => {
     // remove password and refresh token field from response
     // return response
 
-    const {username, email, password} = req.body
-    
-    
+    const { username, email, password } = req.body
+
+
     if (
         [username, email, password].some((field) => field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
-    const exsistedUser = await User.findOne({$or: [{email}, {username}]})
+    const exsistedUser = await User.findOne({ $or: [{ email }, { username }] })
 
-    if(exsistedUser) {
+    if (exsistedUser) {
         throw new ApiError(400, "User already exists")
     }
     const user = await User.create({
@@ -35,20 +52,20 @@ const register = asyncHandler(async(req, res) => {
         password
     })
 
-    if(!user){
+    if (!user) {
         throw new ApiError(500, "User not created")
     }
     const createdUser = await User.findById(user._id).select("-password -refreshToken")
 
     return res
-    .status(201)
-    .json(
-        new ApiResponse(201, "User created successfully", createdUser,
+        .status(201)
+        .json(
+            new ApiResponse(201, "User created successfully", createdUser,
+            )
         )
-    )
 })
 
-const loginUser = asyncHandler(async(req,res)=>{
+const loginUser = asyncHandler(async (req, res) => {
 
     // req body -> data
     // username or email
@@ -57,33 +74,49 @@ const loginUser = asyncHandler(async(req,res)=>{
     //access and referesh token
     //send cookie
 
+    const { username, email, password } = req.body
 
-    const {email, username, password} = req.body
-
-    if(!(username || email)){
-        throw new ApiError(400, "Username or email is required")
+    if (!username && !email) {
+        throw new ApiError(400, "username or email is required")
     }
 
     const user = await User.findOne({
-        $or:[
-            {email},
-            {username}
-        ]
+        $or: [{ username }, { email }]
     })
 
-    if(!user){
+    if (!user) {
         throw new ApiError(400, "User not found")
     }
-
     const isPasswordCorrect = await user.isPasswordCorrect(password)
-
-    if(!isPasswordCorrect){
+    if (!isPasswordCorrect) {
         throw new ApiError(400, "Invalid credentials")
     }
 
+
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
+
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+    //send cookie
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
     return res
-    .status(200)
-    .json(new ApiResponse(200, "User logged in successfully", user))
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshtoken", refreshToken, options)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    user: loggedInUser, accessToken, refreshToken
+                },
+                "User Logged in Successfully"
+            )
+        )
+
+
 
 
 })
