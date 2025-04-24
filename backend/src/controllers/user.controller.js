@@ -197,12 +197,43 @@ const updateUserEmail = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Email updated successfully"))
 })
 
+const deleteUser = asyncHandler(async (req, res) => {
+    const user  = await User.findByIdAndDelete(req.params.id).select("-password -refreshToken")
 
+    if(!user){
+        throw new ApiError(400, "User Not Found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User deleted successfully"))
+})
+
+const getUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select("-password -refreshToken")
+    if (!user) {
+        throw new ApiError(400, "User Not Found")
+    }
+
+    return res.status(200).json(new ApiResponse(200, user, "User fetched successfully"))
+})
+
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find().select("-password -refreshToken")
+    if (!users) {
+        throw new ApiError(400, "Users Not Found")
+    }
+
+    return res.status(200).json(new ApiResponse(200, users, "Users fetched successfully"))
+})
 
 export {
     register,
     loginUser,
     logoutUser,
     updateUsername,
-    updateUserEmail
+    updateUserEmail,
+    deleteUser,
+    getUser,
+    getAllUsers
 }
