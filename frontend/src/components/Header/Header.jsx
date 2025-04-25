@@ -16,7 +16,7 @@ function Header() {
   return (
     <div className='header bg-[#003B95] text-white flex justify-center'>
       <div className="headerContainer mt-[20px] mb-[20px] w-full max-w-[1350px]">
-        <div className="headerList flex gap-[40px]">
+        <div className="headerList flex gap-[40px] sm:flex-row flex-col">
           {menuItems.map(item => (
             <div
               key={item.key}

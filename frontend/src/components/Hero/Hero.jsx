@@ -88,7 +88,6 @@ function Hero() {
           >
             {`${date[0].startDate.toDateString()} — ${date[0].endDate.toDateString()}`}
           </span>
-
           {openDate && (
             <div
               ref={dateRef}
