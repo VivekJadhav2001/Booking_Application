@@ -4,6 +4,8 @@ import Header from '../../components/Header/Header.jsx'
 import Hero from '../../components/Hero/Hero.jsx'
 import FeaturedCities from '../../components/FeaturedCities/FeaturedCities.jsx'
 import { PropertyList } from '../../components/PropertyList/PropertyList.jsx'
+import FeaturedProperties from '../../components/FeaturedProperties/FeaturedProperties.jsx'
+import Footer from '../../components/Footer/Footer.jsx'
 
 function Home() {
     return (
@@ -15,7 +17,10 @@ function Home() {
                 <FeaturedCities/>
                 <h1 className="homeTitle font-bold text-2xl">Browse By Property Type</h1>
                 <PropertyList/>
+                <h1 className="homeTitle font-bold text-2xl">Homes guests love</h1>
+                <FeaturedProperties/>
             </div>
+                <Footer/>
         </div>
     )
 }

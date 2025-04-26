@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faCar, faPlaneDeparture, faTaxi } from '@fortawesome/free-solid-svg-icons';
 
-function Header() {
+function Header({type}) {
   const [activeItem, setActiveItem] = useState("stays");
 
   const menuItems = [

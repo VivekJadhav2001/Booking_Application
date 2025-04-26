@@ -2,7 +2,7 @@ import React from 'react'
 import './PropertyList.css'
 export const PropertyList = () => {
   return (
-    <div className="pList  flex flex-wrap gap-[20px] justify-between max-w-6xl mx-auto">
+    <div className="pList  w-full max-w-[1350px] flex flex-wrap justify-between gap-[15px] mt-[25px] mb-[50px] z-1">
         <div className="pListItem cursor-pointer">
             <img src="https://q-xx.bstatic.com/xdata/images/hotel/263x210/595550862.jpeg?k=3514aa4abb76a6d19df104cb307b78b841ac0676967f24f4b860d289d55d3964&o=" alt="" className="pListImg rounded-2xl overflow-hidden" />
             <div className="pListTitles ml-[10px] mt-[5px]">

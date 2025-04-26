@@ -4,9 +4,12 @@ import { faBed, faCalendarDays, faPerson } from '@fortawesome/free-solid-svg-ico
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { useNavigate } from 'react-router-dom';
+
 
 function Hero() {
   const [openDate, setOpenDate] = useState(false);
+  const [destination, setDestination] = useState(false);
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -53,6 +56,12 @@ function Hero() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const navigate = useNavigate()
+
+  const handleSearch = () => {
+    navigate("/hotels", { state: {destination, date, options } });
+  }
+
 
   return (
     <div className='bg-[#003B95] text-white flex flex-col items-center px-4 py-12'>
@@ -76,6 +85,7 @@ function Hero() {
             type="text"
             placeholder="Where are you going?"
             className='w-full outline-none text-sm text-black placeholder:text-black font-medium'
+            onChange={(e) => setDestination(e.target.value)}
           />
         </div>
 
@@ -139,7 +149,7 @@ function Hero() {
         </div>
 
         {/* Search Button */}
-        <button className='bg-[#0071c2] text-white font-semibold px-6 py-3 hover:bg-[#005fa3] text-sm w-full sm:w-auto'>
+        <button className='bg-[#0071c2] text-white font-semibold px-6 py-3 hover:bg-[#005fa3] text-sm w-full sm:w-auto' onClick={handleSearch}>
           Search
         </button>
       </div>
