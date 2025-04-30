@@ -109,6 +109,7 @@ function Hero() {
                 moveRangeOnFirstSelection={false}
                 ranges={date}
                 className='text-black'
+                minDate={new Date()}
               />
             </div>
           )}
