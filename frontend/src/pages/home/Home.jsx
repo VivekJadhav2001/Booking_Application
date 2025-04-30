@@ -6,6 +6,7 @@ import FeaturedCities from '../../components/FeaturedCities/FeaturedCities.jsx'
 import { PropertyList } from '../../components/PropertyList/PropertyList.jsx'
 import FeaturedProperties from '../../components/FeaturedProperties/FeaturedProperties.jsx'
 import Footer from '../../components/Footer/Footer.jsx'
+import MailList from '../../components/MailList/MailList.jsx'
 
 function Home() {
     return (
@@ -20,6 +21,7 @@ function Home() {
                 <h1 className="homeTitle font-bold text-2xl">Homes guests love</h1>
                 <FeaturedProperties/>
             </div>
+                <MailList/>
                 <Footer/>
         </div>
     )

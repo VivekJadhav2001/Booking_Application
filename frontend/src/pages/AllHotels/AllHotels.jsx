@@ -10,11 +10,12 @@ function AllHotels() {
 
   console.log(location );
 
-  const [destination, setDestination] = useState(location.state.date.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [destination, setDestination] = useState(location.state.destination);
+  const [date, setDate] = useState(location.state.date[0]);
   const [options, setOptions] = useState(location.state.options);
 
 
+  
 
   return (
     <div>
@@ -26,11 +27,12 @@ function AllHotels() {
             <h1 className='text-lg text-[#555] mb-[10px]'>Search</h1>
             <div className="lsItem">
               <label >Destination</label>
-              <input placeholder={destination} className='bg-white outline-none rounded-lg ml-2 text-black' type="text" />
+              <input placeholder={destination} className='bg-white outline-none rounded-lg ml-2 text-black pl-[10px] ' type="text" />
             </div>
-            <div className="lsItem">
+            <div className="lsItem mt-[15px]">
               <label >Check-in Dates</label>
-              <span>{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(date[0].endDate,"MM/dd/yyyy")}`}</span>
+              <span>{`${format(date.startDate, "MM/dd/yyyy")} to ${format(date.endDate, "MM/dd/yyyy")}`}</span>
+
             </div>
           </div>
           <div className="listResult flex-3"></div>
