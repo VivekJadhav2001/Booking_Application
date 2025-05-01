@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { deletehotel, getAllHotels, getHotelInfo, hotels, updateHotels } from '../controllers/hotel.controller.js'
+import { countByCity, deletehotel, getAllHotels, getHotelInfo, hotels, updateHotels } from '../controllers/hotel.controller.js'
 import { verifyAdmin } from '../middleware/auth.middleware.js'
 
 const router = Router()
@@ -15,6 +15,9 @@ router.route("/:id").delete(verifyAdmin, deletehotel)
 
 // get all hotels
 router.route("/getAll").get(getAllHotels)             //here order matters in express routing, if we put getAll before the id, it will not work. So we have to put it after the id.
+
+router.route("/countByCity").get(countByCity)             
+// router.route("/countByType").get(countByType)             
 
 // get hotel by id
 router.route("/:id").get(getHotelInfo)

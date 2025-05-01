@@ -56,11 +56,41 @@ const getAllHotels = asyncHandler(async(req,res) =>{
 
 })
 
+//count by city
+const countByCity = asyncHandler(async(req,res) =>{
+    const cities = req.query.cities.split(",")
+    const list = await Promise.all(cities.map(city => {
+        return Hotel.countDocuments({city:city})
+    }))
+
+
+    return res.status(200)
+    .json(new ApiResponse(200, list))
+
+})
+
+// const countByType = asyncHandler(async(req,res) =>{
+//     const types = await Hotel.aggregate([
+//         {
+//             $group: {
+//                 _id: "$type",
+//                 count: { $sum: 1 },
+//             },
+//         },
+//     ])
+
+//     return res.status(200)
+//     .json(new ApiResponse(200, types))
+
+// })
+
 
 export {
     hotels,
     updateHotels,
     deletehotel,
     getHotelInfo,
-    getAllHotels
+    getAllHotels,
+    countByCity,
+    // countByType
 }
