@@ -70,8 +70,9 @@ const getAllHotels = asyncHandler(async (req, res) => {
 //count by city
 const countByCity = asyncHandler(async(req,res) =>{
     const cities = req.query.cities.split(",")
-    const list = await Promise.all(cities.map(city => {
-        return Hotel.countDocuments({city:city})
+    const list = await Promise.all(cities.map(async (city) => {
+        const count = await Hotel.countDocuments({city:city})
+        return {city, count}
     }))
 
 

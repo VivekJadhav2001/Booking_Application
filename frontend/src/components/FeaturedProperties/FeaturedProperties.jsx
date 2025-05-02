@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-// import useFetch from '../../hooks/useFetch.js'
+import useFetch from '../../hooks/useFetch.js'
 // import axios from 'axios';
 
 function FeaturedProperties() {
