@@ -1,6 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+// import useFetch from '../../hooks/useFetch.js'
+// import axios from 'axios';
 
 function FeaturedProperties() {
+
+    // const { data, loading, error } = useFetch("/api/v1/hotel/countByCity?cities=berlin,LasVegas,london");
+
+    // // console.log(data)
+    // useEffect(() => {
+    //     console.log("Fetched data:", data);  // Check the entire response
+    // }, [data]);
+
+    // const fetchData = async () => {
+    //     try {
+    //       const res = await axios.get("http://localhost:8000/api/v1/hotel/countByCity?cities=berlin,LasVegas,london", {
+    //         withCredentials: true,
+    //       });
+    //       console.log("Fetched data:", res.data.data); // ✅ should log [1, 1, 0]
+    //       setData(res.data.data);
+    //     } catch (err) {
+    //       console.error("Error fetching data:", err);
+    //     }
+    //   };
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);     
+
     return (
         <div className='featured w-full max-w-[1350px] flex flex-wrap  gap-[35px] mt-[25px] mb-[50px] z-1'>
             <div className="featuredItem relative rounded-lg  overflow-hidden border-2 border-slate-200 shadow-lg">
