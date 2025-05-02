@@ -48,13 +48,24 @@ const getHotelInfo = asyncHandler(async(req,res) => {
 
 })
 //Get All hotels
-const getAllHotels = asyncHandler(async(req,res) =>{
-    const hotels = await Hotel.find()
-
-    return res.status(200)
-    .json(new ApiResponse(200, hotels))
-
-})
+const getAllHotels = asyncHandler(async (req, res) => {
+    const { limit, featured,min,max, ...others } = req.query;
+  
+    // ✅ Convert 'featured' to boolean if present
+    if (featured !== undefined) {
+      others.featured = featured === 'true'; // converts "true" to true
+    }
+  
+    // ✅ Limit is also converted to number
+    const hotels = await Hotel.find({
+        ...others,
+        cheapestPrice: { $gt: min | 1, $lt: max || 999 },
+    }).limit(Number(limit) || 0);
+  
+    return res.status(200).json(new ApiResponse(200, hotels));
+  });
+  
+  
 
 //count by city
 const countByCity = asyncHandler(async(req,res) =>{
@@ -85,6 +96,22 @@ const countByCity = asyncHandler(async(req,res) =>{
 
 // })
 
+const countByType = asyncHandler(async(req,res) => {
+    const hotelCount = await Hotel.countDocuments({type:"hotel"})
+    const apartmentCount = await Hotel.countDocuments({type:"apartment"})   
+    const resortCount = await Hotel.countDocuments({type:"resort"})
+    const villaCount = await Hotel.countDocuments({type:"villa"})
+
+    return res.status(200).json({
+        success: true,
+        data: [
+          { type: "hotel", count: hotelCount },
+          { type: "apartment", count: apartmentCount },
+          { type: "resort", count: resortCount },
+          { type: "villa", count: villaCount }
+        ]
+      });
+})
 
 export {
     hotels,
@@ -93,5 +120,5 @@ export {
     getHotelInfo,
     getAllHotels,
     countByCity,
-    // countByType
+    countByType
 }

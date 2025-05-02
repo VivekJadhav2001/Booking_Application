@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 
 function FeaturedProperties() {
 
-    // const { data, loading, error } = useFetch("/api/v1/hotel/countByCity?cities=berlin,LasVegas,london");
+    const { data, loading, error } = useFetch("/api/v1/hotel/countByCity?cities=berlin,LasVegas,london");
 
     // // console.log(data)
     // useEffect(() => {
