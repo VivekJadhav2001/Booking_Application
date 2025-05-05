@@ -49,21 +49,26 @@ const getHotelInfo = asyncHandler(async(req,res) => {
 })
 //Get All hotels
 const getAllHotels = asyncHandler(async (req, res) => {
-    const { limit, featured,min,max, ...others } = req.query;
+    const { limit, featured, min, max, city, ...others } = req.query;
   
-    // ✅ Convert 'featured' to boolean if present
-    if (featured !== undefined) {
-      others.featured = featured === 'true'; // converts "true" to true
+    const query = {
+      ...others,
+      cheapestPrice: { $gt: min || 1, $lt: max || 999 },
+    };
+  
+    if (city) {
+      query.city = { $regex: city, $options: "i" }; // ✅ case-insensitive city match
     }
   
-    // ✅ Limit is also converted to number
-    const hotels = await Hotel.find({
-        ...others,
-        cheapestPrice: { $gt: min | 1, $lt: max || 999 },
-    }).limit(Number(limit) || 0);
+    if (featured !== undefined) {
+      query.featured = featured === 'true';
+    }
+  
+    const hotels = await Hotel.find(query).limit(Number(limit) || 0);
   
     return res.status(200).json(new ApiResponse(200, hotels));
   });
+  
   
   
 

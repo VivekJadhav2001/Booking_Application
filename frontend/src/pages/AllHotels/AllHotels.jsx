@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { DateRange } from 'react-date-range';
 import SearchItem from '../../components/SearchItem/SearchItem';
 import Footer from '../../components/Footer/Footer';
+import useFetch from '../../hooks/useFetch'
 
 function AllHotels() {
 
@@ -16,7 +17,17 @@ function AllHotels() {
   const [options, setOptions] = useState(location.state.options);
 
   const [openDate, setOpenDate] = useState(false);
+  
+  const [min, setMin] = useState(undefined);
+  const [max, setMax] = useState(undefined);
 
+  const {data, loading, error, reFetch} = useFetch(`/api/v1/hotel/getAll?city=${destination}&min=${min || 1}&max=${max || 999}`)
+
+  const handleSearch = () => {
+    reFetch(`/api/v1/hotel/getAll?city=${destination}`)
+  }
+
+  // console.log(data)
   return (
     <div>
       <Navbar />
@@ -55,14 +66,23 @@ function AllHotels() {
             <div className="listItem mt-[15px] gap-[10px] flex flex-col">
               <label>Options</label>
 
-              <div className="options mt-[10px] flex justify-between">
+              <div className="options mt-[10px] flex  justify-between">
                 <span className="optionText">Min Price <small>(per Night)</small></span>
-                <input type="number" className='optionInput bg-white h-[25px] w-[40px] pl-4' />
+                <input
+                type="number"
+                className='optionInput bg-white h-[25px] w-[60px] pl-2'
+                onChange={e => setMin(e.target.value)}
+                />
               </div>
 
               <div className="options mt-[10px] flex justify-between">
                 <span className="optionText">Max Price <small>(per Night)</small></span>
-                <input type="number" className='optionInput bg-white h-[25px] w-[40px] pl-4' />
+                <input
+                type="number" 
+                className='bg-white h-[25px] w-[60px] pl-2' 
+                onChange={e => setMax(e.target.value)}
+
+                />
               </div>
 
               <div className="options mt-[10px] flex justify-between">
@@ -97,13 +117,22 @@ function AllHotels() {
 
             </div>
 
-            <button className='listBtn w-full bg-[#003B95] text-white font-bold py-2 px-4 rounded-lg cursor-pointer hover:bg-[#003B95]/80 mt-3'>
+            <button 
+            className='listBtn w-full bg-[#003B95] text-white font-bold py-2 px-4 rounded-lg cursor-pointer hover:bg-[#003B95]/80 mt-3'
+            onClick={handleSearch}
+            >
               Search
             </button>
           </div>
 
           <div className="listResult flex-3">
-            <SearchItem />
+            {loading ? "Loading Please Wait" : (
+              <>
+              {data.map((item, index)=>(
+                <SearchItem item={item} key={item._id} />
+              ))}
+              </>
+            )}
           </div>
         </div>
       </div>
