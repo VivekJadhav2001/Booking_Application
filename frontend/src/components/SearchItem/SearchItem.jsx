@@ -6,7 +6,9 @@ function SearchItem({item}) {
     <div className="searchContainer">
 
       <div className="searchItem flex justify-between bg-white p-[20px] rounded-lg mb-[20px]">
+        <Link to={`/hotels/${item._id}`}>
         <img src={item.photos[0]} alt="" className='w-[200px] h-[200px] rounded-lg cursor-pointer' />
+        </Link>
         <div className="searchDetails flex-1 px-[20px]">
           <h1 className="text-2xl font-bold text-[#2062b7]">{item.name}</h1>
           <span className="text-[#555] text-sm">{item.distance}m from center</span>

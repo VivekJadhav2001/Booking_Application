@@ -1,16 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faCalendarDays, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../../context/SearchContext.jsx';
 
 
 function Hero() {
   const [openDate, setOpenDate] = useState(false);
-  const [destination, setDestination] = useState(false);
-  const [date, setDate] = useState([
+  const [destination, setDestination] = useState("");
+  const [dates, setDates] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -58,8 +59,11 @@ function Hero() {
 
   const navigate = useNavigate()
 
+  const {dispatch} = useContext(SearchContext)
+
   const handleSearch = () => {
-    navigate("/hotels", { state: {destination, date, options } });
+    dispatch({type:"NEW_SEARCH", payload:{destination,dates,options}})
+    navigate("/hotels", { state: {destination, dates, options } });
   }
 
 
@@ -96,7 +100,7 @@ function Hero() {
             onClick={() => setOpenDate(!openDate)}
             className='text-sm text-black font-medium cursor-pointer select-none'
           >
-            {`${date[0].startDate.toDateString()} — ${date[0].endDate.toDateString()}`}
+            {`${dates[0].startDate.toDateString()} — ${dates[0].endDate.toDateString()}`}
           </span>
           {openDate && (
             <div
@@ -105,9 +109,9 @@ function Hero() {
             >  //absolute positioning for calendar problem
               <DateRange
                 editableDateInputs={true}
-                onChange={(item) => setDate([item.selection])}
+                onChange={(item) => setDates([item.selection])}
                 moveRangeOnFirstSelection={false}
-                ranges={date}
+                ranges={dates}
                 className='text-black'
                 minDate={new Date()}
               />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import Header from '../../components/Header/Header'
 import { useLocation } from 'react-router-dom'
@@ -7,13 +7,14 @@ import { DateRange } from 'react-date-range';
 import SearchItem from '../../components/SearchItem/SearchItem';
 import Footer from '../../components/Footer/Footer';
 import useFetch from '../../hooks/useFetch'
+import { SearchContext } from '../../context/SearchContext';
 
 function AllHotels() {
 
   const location = useLocation();
 
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date[0]);
+  const [dates, setDates] = useState(location.state.dates[0]);
   const [options, setOptions] = useState(location.state.options);
 
   const [openDate, setOpenDate] = useState(false);
@@ -52,13 +53,13 @@ function AllHotels() {
                 className='flex items-center bg-white p-2 cursor-pointer'
                 onClick={() => setOpenDate(!openDate)}
               >
-                {`${format(date.startDate, "MM/dd/yyyy")} to ${format(date.endDate, "MM/dd/yyyy")}`}
+                {`${format(dates.startDate, "MM/dd/yyyy")} to ${format(dates.endDate, "MM/dd/yyyy")}`}
               </span>
               {openDate && (
                 <DateRange
-                  onChange={item => setDate([item.selection])}
+                  onChange={item => setDates([item.selection])}
                   minDate={new Date()}
-                  ranges={[date]}
+                  ranges={[dates]}
                 />
               )}
             </div>
